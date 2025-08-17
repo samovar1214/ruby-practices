@@ -28,7 +28,8 @@ end
 
 options = ARGV.getopts('a')
 
-filenames = options['a'] ? Dir.glob('*', File::FNM_DOTMATCH).sort : Dir.glob('*').sort
+glob_option = options['a'] ? File::FNM_DOTMATCH : 0
+filenames = Dir.glob('*', glob_option).sort
 
 column_count = 3
 rows = layout_by_columns(filenames, column_count)
