@@ -26,10 +26,12 @@ def print_rows(rows)
   end
 end
 
-options = ARGV.getopts('a')
+options = ARGV.getopts('ar')
 
 glob_option = options['a'] ? File::FNM_DOTMATCH : 0
 filenames = Dir.glob('*', glob_option).sort
+
+filenames.reverse! if options['r']
 
 column_count = 3
 rows = layout_by_columns(filenames, column_count)
