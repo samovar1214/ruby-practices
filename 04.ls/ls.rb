@@ -4,6 +4,12 @@
 require 'optparse'
 require 'etc'
 
+def print_column_format(filenames)
+  column_count = 3
+  rows = layout_by_columns(filenames, column_count)
+  print_rows(rows)
+end
+
 def layout_by_columns(filenames, column_count)
   row_count = filenames.length.ceildiv(column_count)
   rows = Array.new(row_count) { [] }
@@ -54,22 +60,20 @@ def render_filetype_and_filemode(file_info)
 end
 
 def print_long_format(filenames)
-  file_infos = filenames.map { |filename| [filename, File.lstat(filename)] }
+  file_infos = filenames.map { [it, File.lstat(it)] }
 
   total_blocks = file_infos.sum { |_, file_info| file_info.blocks } / 2
   puts "total #{total_blocks}"
 
   file_infos.each do |filename, file_info|
-    printf(
-      "%<mode>s %<links>d %<owner>s %<group>s %<size>4d %<mtime>s %<name>s\n",
-      mode: render_filetype_and_filemode(file_info),
-      links: file_info.nlink,
-      owner: Etc.getpwuid(file_info.uid).name,
-      group: Etc.getgrgid(file_info.gid).name,
-      size: file_info.size,
-      mtime: file_info.mtime.strftime('%b %e %H:%M'),
-      name: filename
-    )
+    mode = render_filetype_and_filemode(file_info)
+    links = file_info.nlink
+    owner = Etc.getpwuid(file_info.uid).name
+    group = Etc.getgrgid(file_info.gid).name
+    size  = file_info.size.to_s.rjust(4)
+    mtime = file_info.mtime.strftime('%b %e %H:%M')
+
+    puts "#{mode} #{links} #{owner} #{group} #{size} #{mtime} #{filename}"
   end
 end
 
@@ -83,7 +87,5 @@ filenames.reverse! if options['r']
 if options['l']
   print_long_format(filenames)
 else
-  column_count = 3
-  rows = layout_by_columns(filenames, column_count)
-  print_rows(rows)
+  print_column_format(filenames)
 end
