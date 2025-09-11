@@ -66,14 +66,15 @@ def print_long_format(filenames)
   puts "total #{total_blocks}"
 
   file_infos.each do |filename, file_info|
-    mode = render_filetype_and_filemode(file_info)
-    links = file_info.nlink
-    owner = Etc.getpwuid(file_info.uid).name
-    group = Etc.getgrgid(file_info.gid).name
-    size  = file_info.size.to_s.rjust(4)
-    mtime = file_info.mtime.strftime('%b %e %H:%M')
-
-    puts "#{mode} #{links} #{owner} #{group} #{size} #{mtime} #{filename}"
+    puts [
+      render_filetype_and_filemode(file_info),
+      file_info.nlink,
+      Etc.getpwuid(file_info.uid).name,
+      Etc.getgrgid(file_info.gid).name,
+      file_info.size.to_s.rjust(4),
+      file_info.mtime.strftime('%b %e %H:%M'),
+      filename
+    ].join(' ')
   end
 end
 
