@@ -49,15 +49,10 @@ file_contents = if files.empty?
 
 total_counts = { lines: 0, words: 0, bytes: 0 }
 
-if file_contents.size > 1
-  file_contents.each do |name, counts|
-    puts format_output(name, counts, options)
-    total_counts[:lines] += counts[:lines]
-    total_counts[:words] += counts[:words]
-    total_counts[:bytes] += counts[:bytes]
-  end
-  puts format_output('total', total_counts, options)
-else
-  name, counts = file_contents.first
+file_contents.each do |name, counts|
   puts format_output(name, counts, options)
+  total_counts[:lines] += counts[:lines]
+  total_counts[:words] += counts[:words]
+  total_counts[:bytes] += counts[:bytes]
 end
+puts format_output('total', total_counts, options) if file_contents.size > 1
