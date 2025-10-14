@@ -16,7 +16,7 @@ end
 def count_content(content)
   {
     lines: content.lines.size,
-    words: content.split(/\s+/).size,
+    words: content.strip.split(/\s+/).size,
     bytes: content.bytesize
   }
 end
