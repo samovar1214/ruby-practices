@@ -3,6 +3,12 @@
 
 require 'optparse'
 
+OPTION_FIELD_MAPPING = [
+  [:lines, 'l'],
+  [:words, 'w'],
+  [:bytes, 'c']
+].freeze
+
 def read_stdin
   content = $stdin.read
   ['', count_content(content)]
@@ -23,9 +29,8 @@ end
 
 def format_output(name, counts, options)
   no_option = !options['l'] && !options['w'] && !options['c']
-  fields = [[:lines, 'l'], [:words, 'w'], [:bytes, 'c']]
 
-  output_fields = fields.map do |field, opt|
+  output_fields = OPTION_FIELD_MAPPING.map do |field, opt|
     counts[field].to_s.rjust(3) if no_option || options[opt]
   end.compact
 
