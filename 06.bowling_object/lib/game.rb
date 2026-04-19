@@ -18,7 +18,7 @@ class Game
       end
     end
 
-    point += frames[9].score
+    point += @frames[9].score
   end
 
   private
@@ -40,11 +40,11 @@ class Game
   end
 
   def strike_bonus(index)
-    two_shots = frames[index + 1].shots + (frames[index + 2]&.shots || [])
+    two_shots = @frames[index + 1].shots + (@frames[index + 2]&.shots || [])
     two_shots[0..1].map(&:score).sum
   end
 
   def spare_bonus(index)
-    frames[index + 1].shots[0].score
+    @frames[index + 1].shots[0].score
   end
 end
