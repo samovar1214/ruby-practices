@@ -8,17 +8,18 @@ class Game
   end
 
   def score
-    point = 0
+    total_score = 0
+
     @frames[0..8].each_with_index do |frame, index|
-      point += frame.score
+      total_score += frame.score
       if frame.strike?
-        point += strike_bonus(index)
+        total_score += strike_bonus(index)
       elsif frame.spare?
-        point += spare_bonus(index)
+        total_score += spare_bonus(index)
       end
     end
 
-    point += @frames[9].score
+    total_score + frames[9].score
   end
 
   private
@@ -41,7 +42,7 @@ class Game
 
   def strike_bonus(index)
     two_shots = @frames[index + 1].shots + (@frames[index + 2]&.shots || [])
-    two_shots[0..1].map(&:score).sum
+    two_shots[0..1].sum(&:score)
   end
 
   def spare_bonus(index)
