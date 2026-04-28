@@ -3,6 +3,6 @@
 
 require_relative '../lib/game'
 
-pins = ARGV[0].split(',')
-game = Game.new(pins)
+marks = ARGV[0].split(',')
+game = Game.new(marks)
 puts game.score
