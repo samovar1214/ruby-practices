@@ -3,8 +3,8 @@
 require_relative 'frame'
 
 class Game
-  def initialize(pins)
-    @frames = build_frames(pins)
+  def initialize(marks)
+    @frames = build_frames(marks)
   end
 
   def score
@@ -19,23 +19,22 @@ class Game
       end
     end
 
-    total_score + frames[9].score
+    total_score + @frames[9].score
   end
 
   private
 
-  def build_frames(pins)
-    (1..10).each_with_object([]) do |index, frames|
-      if index < 10
-        if pins[0] == 'X'
-          frames << Frame.new(pins.shift)
-        else
-          first_pin, second_pin = pins.shift(2)
-          frames << Frame.new(first_pin, second_pin)
-        end
+  def build_frames(marks)
+    mark_index = 0
+
+    Array.new(10) do |frame_index|
+      if frame_index == 9
+        Frame.new(*marks[mark_index..])
       else
-        first_pin, second_pin, third_pin = pins
-        frames << Frame.new(first_pin, second_pin, third_pin)
+        marks_count = Shot.new(marks[mark_index]).strike? ? 1 : 2
+        frame = Frame.new(*marks[mark_index, marks_count])
+        mark_index += marks_count
+        frame
       end
     end
   end
