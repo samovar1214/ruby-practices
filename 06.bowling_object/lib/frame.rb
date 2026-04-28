@@ -10,7 +10,7 @@ class Frame
   end
 
   def score
-    shots.map(&:score).sum
+    shots.sum(&:score)
   end
 
   def strike?
@@ -18,6 +18,6 @@ class Frame
   end
 
   def spare?
-    shots[0].score + shots[1].score == 10 unless strike?
+    !strike? && shots[0..1].sum(&:score) == 10
   end
 end
