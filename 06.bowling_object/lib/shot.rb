@@ -7,9 +7,11 @@ class Shot
     @mark = mark
   end
 
-  def score
-    return 10 if mark == 'X'
+  def strike?
+    mark == 'X'
+  end
 
-    mark.to_i
+  def score
+    strike? ? 10 : mark.to_i
   end
 end
