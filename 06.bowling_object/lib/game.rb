@@ -4,7 +4,8 @@ require_relative 'frame'
 
 class Game
   def initialize(marks)
-    @frames = build_frames(marks)
+    shots = marks.map { |mark| Shot.new(mark) }
+    @frames = build_frames(shots)
   end
 
   def score
@@ -24,17 +25,17 @@ class Game
 
   private
 
-  def build_frames(marks)
-    mark_index = 0
+  def build_frames(shots)
+    shot_index = 0
 
-    Array.new(10) do |frame_index|
-      if frame_index == 9
-        Frame.new(*marks[mark_index..])
+    Array.new(10) do |index|
+      if index == 9
+        Frame.new(index, shots[shot_index..])
       else
-        marks_count = Shot.new(marks[mark_index]).strike? ? 1 : 2
-        frame = Frame.new(*marks[mark_index, marks_count])
-        mark_index += marks_count
-        frame
+        shots_count = shots[shot_index].strike? ? 1 : 2
+        Frame.new(index, shots[shot_index, shots_count]).tap do
+          shot_index += shots_count
+        end
       end
     end
   end

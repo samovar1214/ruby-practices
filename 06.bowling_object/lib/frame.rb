@@ -3,10 +3,11 @@
 require_relative 'shot'
 
 class Frame
-  attr_reader :shots
+  attr_reader :index, :shots
 
-  def initialize(first_mark, second_mark = nil, third_mark = nil)
-    @shots = [first_mark, second_mark, third_mark].compact.map { |mark| Shot.new(mark) }
+  def initialize(index, shots)
+    @index = index
+    @shots = shots
   end
 
   def score
