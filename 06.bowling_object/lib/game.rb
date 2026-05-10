@@ -9,18 +9,7 @@ class Game
   end
 
   def score
-    total_score = 0
-
-    @frames[0..8].each_with_index do |frame, index|
-      total_score += frame.score
-      if frame.strike?
-        total_score += strike_bonus(index)
-      elsif frame.spare?
-        total_score += spare_bonus(index)
-      end
-    end
-
-    total_score + @frames[9].score
+    @frames.sum { |frame| frame.score(@frames) }
   end
 
   private
@@ -38,14 +27,5 @@ class Game
         end
       end
     end
-  end
-
-  def strike_bonus(index)
-    two_shots = @frames[index + 1].shots + (@frames[index + 2]&.shots || [])
-    two_shots[0..1].sum(&:score)
-  end
-
-  def spare_bonus(index)
-    @frames[index + 1].shots[0].score
   end
 end
