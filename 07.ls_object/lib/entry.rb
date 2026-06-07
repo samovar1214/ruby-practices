@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'etc'
-
 class Entry
   attr_reader :name
 
@@ -10,47 +8,32 @@ class Entry
     @stat = File.lstat(path)
   end
 
+  def ftype
+    @stat.ftype
+  end
+
   def mode
-    filetype_table = {
-      'directory' => 'd',
-      'file' => '-',
-      'link' => 'l'
-    }
-
-    filemode_table = {
-      '0' => '---',
-      '1' => '--x',
-      '2' => '-w-',
-      '3' => '-wx',
-      '4' => 'r--',
-      '5' => 'r-x',
-      '6' => 'rw-',
-      '7' => 'rwx'
-    }
-
-    type = filetype_table[@stat.ftype]
-    permissions = @stat.mode.to_s(8)[-3, 3].chars.map(&filemode_table).join
-    type + permissions
+    @stat.mode
   end
 
   def nlink
-    @stat.nlink.to_s
+    @stat.nlink
   end
 
-  def user
-    Etc.getpwuid(@stat.uid).name
+  def uid
+    @stat.uid
   end
 
-  def group
-    Etc.getgrgid(@stat.gid).name
+  def gid
+    @stat.gid
   end
 
   def size
-    @stat.size.to_s
+    @stat.size
   end
 
   def mtime
-    @stat.mtime.strftime('%b %e %H:%M')
+    @stat.mtime
   end
 
   def blocks
