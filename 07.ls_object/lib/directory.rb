@@ -3,17 +3,18 @@
 require_relative 'entry'
 
 class Directory
-  def initialize(path, options)
+  def initialize(path, all: false, reverse: false)
     @path = path
-    @options = options
+    @all = all
+    @reverse = reverse
   end
 
   def entries
-    glob_option = @options[:a] ? File::FNM_DOTMATCH : 0
+    glob_option = @all ? File::FNM_DOTMATCH : 0
     paths = Dir.glob('*', glob_option).sort
 
     entries = paths.map { |path| Entry.new(path) }
-    @options[:r] ? entries.reverse : entries
+    @reverse ? entries.reverse : entries
   end
 
   def total_blocks

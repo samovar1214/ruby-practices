@@ -9,7 +9,7 @@ class ListCommand
   end
 
   def run
-    directory = Directory.new('.', @options)
+    directory = Directory.new('.', all: @options[:a], reverse: @options[:r])
     entries = directory.entries
 
     @options[:l] ? display_long(directory, entries) : display_columns(entries)
