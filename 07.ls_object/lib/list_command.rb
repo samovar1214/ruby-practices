@@ -2,6 +2,7 @@
 
 require 'optparse'
 require_relative 'directory'
+require_relative 'long_formatter'
 
 class ListCommand
   def initialize(argv)
@@ -12,25 +13,16 @@ class ListCommand
     directory = Directory.new('.', all: @options[:a], reverse: @options[:r])
     entries = directory.entries
 
-    @options[:l] ? display_long(directory, entries) : display_columns(entries)
+    @options[:l] ? display_long(directory.total_blocks, entries) : display_columns(entries)
   end
 
   private
 
-  def display_long(directory, entries)
-    puts "total #{directory.total_blocks}"
+  def display_long(total_blocks, entries)
+    puts "total #{total_blocks}"
 
-    entries.each do |entry|
-      puts [
-        entry.mode,
-        entry.nlink,
-        entry.user,
-        entry.group,
-        entry.size.rjust(4),
-        entry.mtime,
-        entry.name
-      ].join(' ')
-    end
+    formatter = LongFormatter.new(entries)
+    puts formatter.format
   end
 
   def display_columns(entries)
