@@ -5,6 +5,8 @@ require_relative 'directory'
 require_relative 'long_formatter'
 
 class ListCommand
+  COLUMN_COUNT = 3
+
   def initialize(argv)
     @options = argv.getopts('arl').transform_keys(&:to_sym)
   end
@@ -27,8 +29,7 @@ class ListCommand
 
   def display_columns(entries)
     names = entries.map(&:name)
-    column_count = 3
-    rows = layout_by_columns(names, column_count)
+    rows = layout_by_columns(names, COLUMN_COUNT)
 
     print_rows(rows)
   end
